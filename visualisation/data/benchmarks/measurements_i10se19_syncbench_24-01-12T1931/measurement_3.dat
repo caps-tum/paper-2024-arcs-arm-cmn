@@ -1,0 +1,23 @@
+Running OpenMP benchmark version 4.0
+	2 thread(s)
+	500 outer repetitions
+	5000.00 test time (microseconds)
+	126 delay length (iterations) 
+	0.100000 delay time (microseconds)
+
+--------------------------------------------------------
+Computing reference time 1 time using 163840 reps
+
+Sample_size       Mean       Median     Min        Max        StdDev     Outliers
+ 500               0.090071   0.090070   0.090057   0.090185   0.000010   5
+reference time 1 mean time    = 0.090071 microseconds +/- 0.000019
+reference time 1 median time  = 0.090070 microseconds
+
+--------------------------------------------------------
+Computing BARRIER time using 40960 reps
+
+Sample_size       Mean       Median     Min        Max        StdDev     Outliers
+ 500               0.383811   0.383717   0.382494   0.385137   0.000557   0
+BARRIER time         = 0.383811 microseconds +/- 0.001091
+BARRIER overhead     = 0.293740 microseconds +/- 0.001111
+BARRIER median_ovrhd = 0.293647 microseconds 

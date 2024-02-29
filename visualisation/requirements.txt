@@ -1,0 +1,6 @@
+matplotlib~=3.8.3
+pandas~=2.1.2
+numpy~=1.26.4
+functionCacher~=1.0.4
+scipy~=1.11.4
+typing_extensions~=4.10.0
