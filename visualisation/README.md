@@ -9,7 +9,7 @@ Note: All relative paths below are relative to `$root/visualisation`!
 
 ## Figure 1
 
-Self-made, find the .pdf in `figures/MXP.pdf` and the corresponding Affinity Design 2 file in `figures/MXP.afdesign`.
+Self-made, find the .pdf in `figures/MXP.pdf`,  the corresponding Affinity Design 2 file in `figures/MXP.afdesign`, and an SVG version in `figures/MXP.svg` for compatibility. Note that the SVG version might not be exactly equivalent to the original due to export constraints.
 
 ## Figure 2
 
