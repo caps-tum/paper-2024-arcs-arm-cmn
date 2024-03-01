@@ -7,6 +7,16 @@ The following sections illustrate how to reproduce all figures.
 
 Note: All relative paths below are relative to `$root/visualisation`!
 
+## Preparation
+
+The visualisation scripts in this repository have a few requirements, as listed in `requirements.txt`. 
+All scripts have been developed and tested using Python 3.11 on a Linux system. 
+Other operating systems are expected to work, older versions of Python however not.
+
+Create an appropriate virtual environment using `python3 -m venv $venv_name`, and activate it.
+Then install the requirements using `pip3 install -r requirements.txt`.
+
+
 ## Figure 1
 
 Self-made, find the .pdf in `figures/MXP.pdf`,  the corresponding Affinity Design 2 file in `figures/MXP.afdesign`, and an SVG version in `figures/MXP.svg` for compatibility. Note that the SVG version might not be exactly equivalent to the original due to export constraints.
