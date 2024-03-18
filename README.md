@@ -1,7 +1,7 @@
 # ARM CMN Paper
 
 This repository contains all software and data for the paper
-> < paper title here >
+> Exploring the ARM Core Mesh Network Topology (2024, under review)
 
 This repository contains the following important folders:
 - `software`
