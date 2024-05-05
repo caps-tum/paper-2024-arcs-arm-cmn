@@ -1,3 +1,3 @@
 [submodule "software/cmn_topology_tool"]
 	path = software/cmn_topology_tool
-	url = git@gitlab.lrz.de:friese-arm-cmn/topology-tool.git
+	url = git@github.com:caps-tum/cmn-topology-tool
