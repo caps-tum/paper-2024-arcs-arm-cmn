@@ -215,7 +215,7 @@ def visualise_layout(dsus: list[DSU],
         if enable_distance:
             add_rect(row.node_x, row.node_y, ax=ax, color="white", size=cell_size, zorder=10)
             if (row.node_x, row.node_y) in distance_to_target.source_nodes:
-                add_rect(row.node_x, row.node_y, ax=ax, color="black", size=cell_size,  zorder=11, alpha=0.75, hatch="/", fill=False)
+                add_rect(row.node_x, row.node_y, ax=ax, color="black", size=cell_size,  zorder=11, alpha=0.75, hatch="\\", fill=False)
         else:
             add_rect(row.node_x, row.node_y, ax=ax, color="lightgrey", size=cell_size,  zorder=10)
 
@@ -387,29 +387,29 @@ def main():
                      cell_size=.71,
                      font_size_cells=20)
 
-    # matplotlib.rc('font', size=42)
-    # visualise_layout(dsus=dsus,
-    #                  mesh_size=mesh_size,
-    #                  layout_static=layout_df,
-    #                  out_fname=f"{fname}_cache",
-    #                  numa_ranges=numa_ranges,
-    #                  distance_to_target=distance_cache,
-    #                  legend=False,
-    #                  annotations=False,
-    #                  cell_size=.75,
-    #                  axis_labels=False)
-    #
-    #
-    # visualise_layout(dsus=dsus,
-    #                  mesh_size=mesh_size,
-    #                  layout_static=layout_df,
-    #                  out_fname=f"{fname}_memory",
-    #                  numa_ranges=numa_ranges,
-    #                  distance_to_target=distance_memory,
-    #                  legend=False,
-    #                  annotations=False,
-    #                  cell_size=.75,
-    #                  axis_labels=False)
+    matplotlib.rc('font', size=42)
+    visualise_layout(dsus=dsus,
+                     mesh_size=mesh_size,
+                     layout_static=layout_df,
+                     out_fname=f"{fname}_cache",
+                     numa_ranges=numa_ranges,
+                     distance_to_target=distance_cache,
+                     legend=False,
+                     annotations=False,
+                     cell_size=.75,
+                     axis_labels=False)
+
+
+    visualise_layout(dsus=dsus,
+                     mesh_size=mesh_size,
+                     layout_static=layout_df,
+                     out_fname=f"{fname}_memory",
+                     numa_ranges=numa_ranges,
+                     distance_to_target=distance_memory,
+                     legend=False,
+                     annotations=False,
+                     cell_size=.75,
+                     axis_labels=False)
 
 if __name__ == "__main__":
     main()
