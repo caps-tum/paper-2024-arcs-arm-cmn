@@ -99,6 +99,7 @@ def get_dsu(run: Run, mesh_size: (int, int), dsu_0: Optional[DSU] = None) -> DSU
      want to get core X.
 
     :param run: Measurement run
+    :param mesh_size: size of mesh
     :param dsu_0: Optional dsu_0
     :returns: Brightest core
     """

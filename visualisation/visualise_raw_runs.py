@@ -261,6 +261,9 @@ def plot_run_one_row(run: Run,
         ax.xaxis.set_major_locator(matplotlib.ticker.MultipleLocator(1))
         ax.yaxis.set_major_locator(matplotlib.ticker.MultipleLocator(1))
 
+        rect = plt.Rectangle(xy=(-.5,-.5), width=8, height=8, hatch="\\", alpha=.5, color="black", zorder=-1, fill=False)
+        ax.add_patch(rect)
+
     cb = grid[-1].cax.colorbar(im)
     cb.set_label("# events")
     grid[0].set_ylabel("Mesh Y")

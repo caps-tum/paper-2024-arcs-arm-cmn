@@ -1,7 +1,7 @@
 # Visualisation code for ARM CMN Topology paper
 
 The code in this repository is used to reproduce the figures of the paper
-> Exploring the ARM Core Mesh Network Topology (2024, under review)
+> Exploring the ARM Coherent Mesh Network Topology (2024, under review)
 
 The following sections illustrate how to reproduce all figures.
 

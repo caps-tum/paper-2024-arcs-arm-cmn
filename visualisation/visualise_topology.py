@@ -44,7 +44,7 @@ class Distance:
     name: str
     source_nodes: list[tuple[int,int]]
 
-def add_rect(x: float, y: float, ax: plt.Axes, size: float=1, **kwargs):
+def add_rect(x: float, y: float, ax: plt.Axes, size: float = 1, **kwargs):
     """
     Add matplotlib rect to plot at (x,y)
     :param x: X position
@@ -53,9 +53,10 @@ def add_rect(x: float, y: float, ax: plt.Axes, size: float=1, **kwargs):
     :param size: Size of rect
     :param kwargs: Any other args to plt.Rectangle()
     """
-    rect = plt.Rectangle((x + (1-size)/2, y + (1-size)/2), size, size, **kwargs)
+    rect = plt.Rectangle(xy=(x + (1-size)/2, y + (1-size)/2), width=size, height=size, **kwargs)
     rect.set_path_effects([matplotlib.patheffects.Stroke(linewidth=1, foreground="black")])
     ax.add_patch(rect)
+
     return rect
 
 
@@ -64,7 +65,8 @@ def add_cell(ax: plt.Axes, dsu: DSU, fontsize: int,
              cell_color: Optional[typing.Union[str, typing.Iterable]] = None,
              font_color: typing.Union[str, typing.Iterable] = "black",
              annotations: bool = True,
-             cell_size: float = .5):
+             cell_size: float = .5,
+             hatch: Optional[str] = None):
     """
     Add cell for DSU, which involves adding the rectangle (add_rect) and optionally adding annotations and handling several colouring options.
     :param ax: Main matplotlib axis
@@ -97,14 +99,21 @@ def add_cell(ax: plt.Axes, dsu: DSU, fontsize: int,
         elif isinstance(cell_color, np.ndarray):
             print("Warning! cell_color is an np.ndarray, which is not handled here! Image might contain unexpected results")
 
-    add_rect(x=dsu.x, y=dsu.y, ax=ax, size=cell_size, color=cell_color, alpha=1, zorder=12)
+    add_rect(x=dsu.x, y=dsu.y, ax=ax, size=cell_size, color=cell_color, zorder=12)
+    if hatch:
+        add_rect(x=dsu.x, y=dsu.y, ax=ax, size=cell_size, color="black", zorder=13, alpha=.15, hatch=hatch, fill=False)
+
     if annotations:
         ax.annotate(text=f"{dsu.coreids[0]}", xy=(dsu.x + .5, dsu.y + .5),
-                    xytext=(dsu.x + .48, dsu.y + .5 + 0.1 * (-1 if dsu.p else 1)),
-                    fontsize=fontsize, ha="right", va="center", color=label_color, zorder=15)
+                    xytext=(dsu.x + .48, dsu.y + .5 + 0.125 * (-1 if dsu.p else 1)),
+                    fontsize=fontsize, ha="right", va="center", color=label_color, zorder=15,
+                         path_effects=[matplotlib.patheffects.Stroke(linewidth=5, foreground=cell_color),
+                                       matplotlib.patheffects.Normal()])
         ax.annotate(text=f"{dsu.coreids[1]}", xy=(dsu.x + .5, dsu.y + .5),
-                    xytext=(dsu.x + .52, dsu.y + .5 + 0.1 * (-1 if dsu.p else 1)),
-                    fontsize=fontsize, ha="left", va="center", color=label_color, zorder=15)
+                    xytext=(dsu.x + .52, dsu.y + .5 + 0.125 * (-1 if dsu.p else 1)),
+                    fontsize=fontsize, ha="left", va="center", color=label_color, zorder=15,
+                         path_effects=[matplotlib.patheffects.Stroke(linewidth=5, foreground=cell_color),
+                                       matplotlib.patheffects.Normal()])
 
 
 def visualise_layout(dsus: list[DSU],
@@ -143,6 +152,8 @@ def visualise_layout(dsus: list[DSU],
     if isinstance(additional_annotations, types.NoneType):
         additional_annotations = {}
 
+    enable_distance = isinstance(distance_to_target, Distance)
+
     # adjust fig size aspect depending on mesh size
     #  calculate ratio of mesh_x/mesh_y and scale fig_size_y accordingly
     #  add: 1 to leave room for one-row legend, 2 for two-row legend
@@ -176,7 +187,7 @@ def visualise_layout(dsus: list[DSU],
     legend_entries = {"mxp": [matplotlib.patches.Patch(facecolor="lightgrey", label="Crosspoint",
                                                        path_effects=[matplotlib.patheffects.Stroke(linewidth=1,
                                                                                                    foreground="black")])],
-                      "dsu": [matplotlib.patches.Patch(facecolor="lightblue", label="Cores",
+                      "dsu": [matplotlib.patches.Patch(facecolor="#82b1d1", label="Cores", hatch="\\\\",
                                                        path_effects=[matplotlib.patheffects.Stroke(linewidth=1,
                                                                                                    foreground="black")])]}
 
@@ -194,35 +205,41 @@ def visualise_layout(dsus: list[DSU],
                 font_color = tab_colors[i % len(tab_colors)]
             for dsu in annot["nodes"]:
                 if dsu not in flat_annotations: flat_annotations[dsu] = {}
-                flat_annotations[dsu][annot["name_filter"]] = {"name": name, "color": font_color}
+                flat_annotations[dsu][annot["name_filter"]] = {"name": name, "color": font_color, "symbol": annot["symbol"]}
 
 
     # add non-core MXP cells
     #  remove core-MXPs by comparing their mesh IDs (they'll be added later with a different cell colour)
     mxp = layout_static[layout_static["event_type"] == "mxp"]
     for i, row in mxp[~mxp.apply(lambda x: (x["node_x"], x["node_y"]), axis=1).isin([(c.x, c.y) for c in dsus])].iterrows():
-        if isinstance(distance_to_target, Distance) and (row.node_x, row.node_y) in distance_to_target.source_nodes:
-            add_rect(row.node_x, row.node_y, ax=ax, color="darkgrey", size=cell_size, fill=True, zorder=10)
+        if enable_distance:
+            add_rect(row.node_x, row.node_y, ax=ax, color="white", size=cell_size, zorder=10)
+            if (row.node_x, row.node_y) in distance_to_target.source_nodes:
+                add_rect(row.node_x, row.node_y, ax=ax, color="black", size=cell_size,  zorder=11, alpha=0.75, hatch="/", fill=False)
         else:
-            add_rect(row.node_x, row.node_y, ax=ax, color="lightgrey", size=cell_size, fill=True, zorder=10)
+            add_rect(row.node_x, row.node_y, ax=ax, color="lightgrey", size=cell_size,  zorder=10)
 
     # add MXP labels & potentially highlight the node label
     for i,g in layout_static[layout_static["event_type"] != "mxp"].groupby(["node_x","node_y"]):
         for port, group in g.groupby("node_port"):
             g_type = group["event_type"].iloc[0]
-            name = f'{g_type} {port}'
+            #name = f'{g_type} {port}'
+            name = f'{g_type}'
             color = "black"
             if (annotation := flat_annotations.get((i[0], i[1]))) and (annot_dict := annotation.get(g_type)):
                 color = annot_dict["color"]
-                legend_entries[annot_dict["name"]] = [matplotlib.patches.Patch(alpha=0, label=annot_dict["name"]), color]
-
+                legend_entries[annot_dict["name"]] = [
+                    matplotlib.patches.Patch(alpha=0, label=f'{annot_dict["symbol"]} {annot_dict["name"]}'), color
+                ]
+                name = f"{annot_dict['symbol']} {name}"
             if annotations:
-                ax.annotate(name, xy=(i[0]+.5, i[1]+.5), xytext=[i[0]+.5, i[1]+.5 + 0.1 * (-1 if port else 1)],
+                ax.annotate(name, xy=(i[0]+.5, i[1]+.5), xytext=[i[0]+.5, i[1]+.5 + 0.125 * (-1 if port else 1)],
                             fontsize=font_size_cells, color=color, ha="center", va="center",
                             zorder=20)
 
+
     # if given, prepare distance_to_target structure by normalising & color-mapping the distances for plotting
-    if isinstance(distance_to_target, Distance):
+    if enable_distance:
         cmap = matplotlib.colormaps["inferno_r"]
         norm = matplotlib.colors.Normalize(vmin=np.min(list(distance_to_target.distances.values())),
                                            vmax=np.max(list(distance_to_target.distances.values())))
@@ -246,11 +263,12 @@ def visualise_layout(dsus: list[DSU],
             font_color = "red"
 
         cell_color = None
-        if isinstance(distance_to_target, Distance):
+        if enable_distance:
             cell_color = distance_to_target.distances.get((dsu.x, dsu.y), None)
 
-        add_cell(ax=ax, dsu=dsu, numa_ranges=numa_ranges, cell_size=cell_size, cell_color=cell_color, fontsize=font_size_cells,
-                 font_color=font_color, annotations=annotations)
+        add_cell(ax=ax, dsu=dsu, numa_ranges=numa_ranges, cell_size=cell_size, cell_color=cell_color,
+                 fontsize=font_size_cells,
+                 font_color=font_color, annotations=annotations, hatch="\\" if not enable_distance else None)
 
 
     # format x,y axes
@@ -281,7 +299,8 @@ def visualise_layout(dsus: list[DSU],
                            bbox_to_anchor=(.5, 1.03 if len(legend_entries) <= 6 else 1.05), # adjust bbox anchor for two-row mode
                            fontsize=20,
                            ncols=ncols,
-                           handletextpad=0)
+                           handletextpad=0,
+                           columnspacing=.75)
         for key, text in zip(legend_entries.keys(), legend.get_texts()):
             if len(legend_entries[key]) > 1:
                 text.set_color(legend_entries[key][1])
@@ -335,10 +354,10 @@ def main():
     ])
 
     additional_annotations = {
-        "Storage": {"name_filter": "rnid", "color": "tab:brown", "nodes": [(0, 7)]},
-        "Network": {"name_filter": "rnid", "color": "tab:blue", "nodes": [(0, 0)]},
-        "Memory":  {"name_filter": "snf",  "color": "tab:red", "nodes": itertools.chain(*memory_locations)},
-        "Cache":   {"name_filter": "hnf",  "color": "tab:green", "nodes": itertools.chain(*[ [(j,i) for i in range(1,5)] for j in [0,2,5,7] ])}
+        "Storage": {"symbol": "(S)", "name_filter": "rnid", "color": "tab:brown", "nodes": [(0, 7)]},
+        "Network": {"symbol": "(N)", "name_filter": "rnid", "color": "tab:blue", "nodes": [(0, 0)]},
+        "Memory":  {"symbol": "(M)", "name_filter": "snf",  "color": "tab:red", "nodes": itertools.chain(*memory_locations)},
+        "Cache":   {"symbol": "(C)", "name_filter": "hnf",  "color": "tab:green", "nodes": itertools.chain(*[ [(j,i) for i in range(1,5)] for j in [0,2,5,7] ])}
     }
 
     mesh_size = (8,8)
@@ -347,6 +366,15 @@ def main():
     layout_df = pd.concat([layout_df, memory_df])
     runs = load_topology_runs(run_name, events, basepath_measurements)
     dsus = general_utils.get_dsus(runs=runs, mesh_size=mesh_size)
+
+    # temp = pd.read_csv("/home/pfriese/Desktop/arm.csv", sep=",")
+    # dsus = [
+    #     DSU(x=row["x"], y=row["y"], coreids=(row["Cluster ID"],row["Core ID"]),
+    #         p=0 if row["Core ID"] < 64 else 1)
+    #     for _, row in temp.iterrows()
+    #     if row["Core ID"] % 2 == 1
+    # ]
+
 
     distance_cache = determine_distances(target_locations=list(copy.deepcopy(additional_annotations["Cache"]["nodes"])),
                                          dsus=dsus, name="HNF")
@@ -359,29 +387,29 @@ def main():
                      cell_size=.71,
                      font_size_cells=20)
 
-    matplotlib.rc('font', size=42)
-    visualise_layout(dsus=dsus,
-                     mesh_size=mesh_size,
-                     layout_static=layout_df,
-                     out_fname=f"{fname}_cache",
-                     numa_ranges=numa_ranges,
-                     distance_to_target=distance_cache,
-                     legend=False,
-                     annotations=False,
-                     cell_size=.75,
-                     axis_labels=False)
-
-
-    visualise_layout(dsus=dsus,
-                     mesh_size=mesh_size,
-                     layout_static=layout_df,
-                     out_fname=f"{fname}_memory",
-                     numa_ranges=numa_ranges,
-                     distance_to_target=distance_memory,
-                     legend=False,
-                     annotations=False,
-                     cell_size=.75,
-                     axis_labels=False)
+    # matplotlib.rc('font', size=42)
+    # visualise_layout(dsus=dsus,
+    #                  mesh_size=mesh_size,
+    #                  layout_static=layout_df,
+    #                  out_fname=f"{fname}_cache",
+    #                  numa_ranges=numa_ranges,
+    #                  distance_to_target=distance_cache,
+    #                  legend=False,
+    #                  annotations=False,
+    #                  cell_size=.75,
+    #                  axis_labels=False)
+    #
+    #
+    # visualise_layout(dsus=dsus,
+    #                  mesh_size=mesh_size,
+    #                  layout_static=layout_df,
+    #                  out_fname=f"{fname}_memory",
+    #                  numa_ranges=numa_ranges,
+    #                  distance_to_target=distance_memory,
+    #                  legend=False,
+    #                  annotations=False,
+    #                  cell_size=.75,
+    #                  axis_labels=False)
 
 if __name__ == "__main__":
     main()
