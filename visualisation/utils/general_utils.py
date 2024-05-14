@@ -5,7 +5,7 @@ from typing import Union, Optional
 import numpy as np
 import pandas as pd
 
-from visualisation.classes import Run, DSU
+from visualisation.utils.classes import Run, DSU
 
 from functionCacher.Cacher import Cacher
 cacher = Cacher()

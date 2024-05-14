@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from functionCacher.Cacher import Cacher
 
-from visualisation.classes import Run
+from visualisation.utils.classes import Run
 cacher = Cacher()
 
 class RunType(enum.Enum):

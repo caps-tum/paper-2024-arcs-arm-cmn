@@ -5,7 +5,8 @@ The code in this repository is used to reproduce the figures of the paper
 
 The following sections illustrate how to reproduce all figures.
 
-Note: All relative paths below are relative to `$root/visualisation`!
+> Note: Please execute all Python scripts below from the **root directory** and set the `PYTHONPATH` variable to it. 
+This can be done for example by using `PYTHONPATH=$(pwd) python3 visualisation/<file>`
 
 ## Preparation
 
@@ -25,10 +26,12 @@ Self-made, find the .pdf in `figures/MXP.pdf`,  the corresponding Affinity Desig
 
 To reproduce this figure, run:
 
-```python3 visualise_raw_runs.py```
+```
+PYTHONPATH=$(pwd) python3 visualisation/visualise_raw_runs.py
+```
 
 
-This should place (or update if already present) a file in `figures/raw_runs/i10se19_2024_02-09T1643.pdf` containing the visualisation.
+This should place (or update if already present) a file in `visualisation/figures/raw_runs/i10se19_2024_02-09T1643.pdf` containing the visualisation.
 Please consult `visualise_raw_runs.py` for more information. The `main()` file controls the visualisation.
 Figure 2 requires the result of a core-to-core latency measurement between cores 60,42, monitored using the CMN Topology Tool.
 You can measure this yourself on an ARM CMN system using the following command:
@@ -49,9 +52,11 @@ In `visualise_raw_runs.py:main`, point `name` to this folder and `basepath_measu
 
 To reproduce Figures 3,4, run:
 
-```python3 visualise_topology.py```
+```
+PYTHONPATH=$(pwd) python3 visualisation/visualise_topology.py
+```
 
-This should place (or update if already present) three file in `figures/topology/`:
+This should place (or update if already present) three file in `visualisation/figures/topology/`:
 - `aam1_monolithic.pdf` (Figure 3)
 - `aam1_monolithic_cache.pdf` (Figure 4a)
 - `aam1_monolithic_memory.pdf` (Figure 4b)
@@ -73,9 +78,11 @@ In `visualise_topology.py:main`, point `name` to this folder and `basepath_measu
 
 ## Figures 5-10
 
-To reproduce Figures 5-10, run:
+To reproduce Figures 5-10:
 
-```python3 benchmarks/analyse_benchmarks.py```
+```
+PYTHONPATH=$(pwd) python3 visualisation/benchmarks/analyse_benchmarks.py
+```
 
 This should place (or update if already present) several files in `figures/benchmarks/`:
 - `BARRIER_2.pdf` (Figure 5)
@@ -85,7 +92,7 @@ This should place (or update if already present) several files in `figures/bench
 - `LULESH_2.pdf` (Figure 9)
 - `LULESH_32_48_64.pdf` (Figure 10)
 
-Please consult `benchmarks/analyse_benchmarks.py` for more information. The `main()` file controls the visualisation.
+Please consult `visualisation/benchmarks/analyse_benchmarks.py` for more information. The `main()` file controls the visualisation.
 
 Data for these measurements are not gathered using the CMN topology tool, but instead using another simple launcher script.
 This is because the CMN topology tool is responsible for gathering and processing perf-related information, which is not necessary nor desired here.
@@ -111,7 +118,7 @@ This script internally determines and sets the correct OpenMP-related variables 
 
 For all run folders both generated using the instructions outlined above and included in this repository, 
 a `meta.md` file is included. This file contains information on the benchmark parameters, like the binary path, arguments,
-added environment variables, etc. Example: `data/benchmarks/[measurements_i10se19_lulesh2.0_24-01-12T2143/meta.md`
+added environment variables, etc. Example: `visualisation/data/benchmarks/[measurements_i10se19_lulesh2.0_24-01-12T2143/meta.md`
 
 ## License
 

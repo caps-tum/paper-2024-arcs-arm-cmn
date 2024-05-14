@@ -14,9 +14,9 @@ from typing import Union, Optional
 
 from mpl_toolkits.axes_grid1 import ImageGrid
 
-from utils import loader_utils, plt_utils
-from utils.loader_utils import load_run
-from classes import Run
+from visualisation.utils import loader_utils, plt_utils
+from visualisation.utils.loader_utils import load_run
+from visualisation.utils.classes import Run
 
 
 pd.options.display.width=1920

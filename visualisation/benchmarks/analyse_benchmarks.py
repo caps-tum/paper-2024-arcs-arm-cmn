@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker
 from pathlib import Path
 
-from visualisation.benchmarks.benchmark_loaders import RunType, load
-from visualisation.classes import Run
+from benchmark_loaders import RunType, load
+from visualisation.utils.classes import Run
 
 matplotlib.rc('font', **{
     'family' : 'sans',

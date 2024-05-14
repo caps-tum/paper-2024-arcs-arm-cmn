@@ -23,9 +23,9 @@ import logging
 log = logging.getLogger("visualise_topology")
 logging.basicConfig(level=logging.WARNING)
 
-from utils import plt_utils, general_utils
-from classes import DSU
-from utils.loader_utils import load_topology_runs, load_events, load_static_layout
+from visualisation.utils import plt_utils, general_utils
+from visualisation.utils.classes import DSU
+from visualisation.utils.loader_utils import load_topology_runs, load_events, load_static_layout
 
 from scipy.spatial.distance import cityblock
 

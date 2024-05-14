@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from visualisation.classes import Run
+from visualisation.utils.classes import Run
 from visualisation.utils.general_utils import cacher, parse_eventid
 
 @cacher.cache
