@@ -1,7 +1,7 @@
 # ARM CMN Paper
 
 This repository contains all software and data for the paper
-> Exploring the ARM Coherent Mesh Network Topology (2024, under review)
+> Friese, P.A., Schulz, M. (2024). Exploring the ARM Coherent Mesh Network Topology. In: Fey, D., Stabernack, B., Lankes, S., Pacher, M., Pionteck, T. (eds) Architecture of Computing Systems. ARCS 2024. Lecture Notes in Computer Science, vol 14842. Springer, Cham. https://doi.org/10.1007/978-3-031-66146-4_15
 
 This repository contains the following important folders:
 - `software`
